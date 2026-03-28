@@ -1,5 +1,5 @@
 {
-  "name": "SenaSmartCourse-Front",
+  "name": "frontend-ssc",
   "type": "module",
   "private": true,
   "scripts": {
@@ -10,8 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@nuxt/icon": "^2.2.1",
+    "@pinia/nuxt": "^0.11.3",
+    "@vueuse/nuxt": "^14.2.1",
     "nuxt": "^4.3.1",
     "vue": "^3.5.28",
-    "vue-router": "^4.6.4"
+    "vue-router": "^4.6.4",
+    "vuetify": "^3.12.2",
+    "vuetify-nuxt-module": "^0.19.5"
   }
 }

@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/juanp/Desktop/Sena%20SmartCourse/frontend-ssc/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs"
