@@ -1,56 +1,43 @@
 <script setup>
-    definePageMeta ({
-        layout: 'default',
-    })
+import { ref, reactive } from 'vue'
+import { useAuthStore } from '~/stores/auth'
 
-    const handleLogin = async () => {
-        if (loading.value) return
+definePageMeta({ layout: 'default' })
 
-        loading.value = true
-        errorMessage.value = ''
+const auth   = useAuthStore()
+const router = useRouter()
 
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            await auth.login(document.value, password.value)
+const form = reactive({ email: '', password: '' })
+const loading = ref(false)
+const error   = ref('')
 
-            const redirectTo = useCookie('redirect_to')
-            const destination = redirectTo.value || '/welcome'
-            redirectTo.value = null
-            return navigateTo(destination);
+async function handleLogin() {
+  if (!form.email || !form.password) return
 
-        } catch (error) {
-            errorMessage.value = error.message
-        } finally {
-            loading.value = false
-        }
-    }
+  loading.value = true
+  error.value   = ''
+
+  const { ok, route, message } = await auth.login(form.email, form.password)
+
+  if (ok) {
+    router.push(route)
+  } else {
+    error.value = message
+  }
+
+  loading.value = false
+}
 </script>
 
-
 <template>
-    <template>
-        
-    </template>
-    <template>
-        <card :width="smAndDown">
-            <v-form>
-                <v-text-field v-model="document" label="Documento" placeholder="Ingrese su documento" clearable />
-                <v-text-field v-model="password" label="Contraseña" type="password" placeholder="Ingrese su contraseña"
-                    clearable />
-        
-                <div class="text-center">
-                    <v-btn size="large" class="mt-4 " color="rgb(0,69,124)" type="submit" :loading="loading"
-                        @click="handleLogin" :disabled="!document || !password || loading">
-                        Ingresar
-                        <template #loader>
-                            <v-progress-linear indeterminate color="white"></v-progress-linear>
-                        </template>
-                    </v-btn>
-                </div>
-            </v-form>
-            <v-alert v-if="errorMessage" type="error" class="mt-4">
-                {{ errorMessage }}
-            </v-alert>
-        </card>
-    </template>
+  <div class="d-flex align-center justify-center" style="min-height: calc(100vh - 64px);">
+    <LoginCard
+      v-model:email="form.email"
+      v-model:password="form.password"
+      :loading="loading"
+      :error="error"
+      @submit="handleLogin"
+      @clear-error="error = ''"
+    />
+  </div>
 </template>

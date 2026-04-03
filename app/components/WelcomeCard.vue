@@ -9,7 +9,7 @@
       size="large"
       rounded="lg"
       class="text-h6 font-weight-bold mb-3"
-      to="/login2"
+      to="/login"
     >
       Iniciar Sesión
     </v-btn>
