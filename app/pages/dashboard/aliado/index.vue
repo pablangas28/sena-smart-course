@@ -97,8 +97,8 @@ const accesos = [
       <v-alert v-if="error" type="error" variant="tonal" rounded="xl" class="mb-4">{{ error }}</v-alert>
 
       <div v-if="cursosActivos.length === 0" class="text-center pa-10">
-        <v-icon size="56" color="grey-lighten-1">mdi-book-open-blank-variant-outline</v-icon>
-        <p class="text-body-2 text-grey mt-3">No tienes cursos activos actualmente.</p>
+        <v-icon size="56" color="black-lighten-1">mdi-book-open-blank-variant-outline</v-icon>
+        <p class="text-body-2 text-black mt-3">No tienes cursos activos actualmente.</p>
       </div>
 
       <v-row v-else>

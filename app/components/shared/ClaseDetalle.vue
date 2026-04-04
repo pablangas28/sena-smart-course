@@ -2,8 +2,9 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 
 const props = defineProps({
-  rolLayout:   { type: String, default: 'instructor' },
-  colorAccent: { type: String, default: '#39A900' },
+  rolLayout:   { type: String,  default: 'instructor' },
+  colorAccent: { type: String,  default: '#39A900' },
+  soloLectura: { type: Boolean, default: false },
 })
 
 const route        = useRoute()
@@ -34,7 +35,6 @@ async function cargarTodo() {
 
     const asistMap = {}
     asistData.forEach(a => { asistMap[a.estudiante_id] = a })
-
     const califMap = {}
     ;(califData?.calificaciones ?? califData ?? []).forEach(c => { califMap[c.estudiante_id] = c })
 
@@ -44,7 +44,6 @@ async function cargarTodo() {
       asistio:       asistMap[reg.user_id]?.asistio ?? false,
       observacion:   asistMap[reg.user_id]?.observacion ?? '',
     }))
-
     calificaciones.value = estudiantesData.map(reg => ({
       estudiante_id: reg.user_id,
       nombre:        `${reg.nombre} ${reg.apellidos}`,
@@ -62,7 +61,6 @@ onMounted(cargarTodo)
 
 // ── Asistencia ────────────────────────────────────────────────────────────
 const guardandoAsistencia = ref(false)
-
 async function guardarAsistencia() {
   guardandoAsistencia.value = true
   try {
@@ -71,21 +69,16 @@ async function guardarAsistencia() {
       body: { asistencias: asistencias.value.map(a => ({ estudiante_id: a.estudiante_id, asistio: a.asistio, observacion: a.observacion || null })) },
     })
     toast('Asistencia guardada.')
-  } catch {
-    toast('No se pudo guardar la asistencia.', 'error')
-  } finally {
-    guardandoAsistencia.value = false
-  }
+  } catch { toast('No se pudo guardar la asistencia.', 'error') }
+  finally { guardandoAsistencia.value = false }
 }
 
 // ── Calificaciones ────────────────────────────────────────────────────────
 const guardandoCalif = ref(false)
 const errorCalif     = ref('')
-
 const calificacionesValidas = computed(() =>
   calificaciones.value.every(c => c.nota === '' || (parseFloat(c.nota) >= 0 && parseFloat(c.nota) <= 5))
 )
-
 async function guardarCalificaciones() {
   errorCalif.value = ''
   guardandoCalif.value = true
@@ -93,40 +86,26 @@ async function guardarCalificaciones() {
     const items = calificaciones.value
       .filter(c => c.nota !== '' && c.nota !== null)
       .map(c => ({ estudiante_id: c.estudiante_id, nota: parseFloat(c.nota), observacion: c.observacion || null }))
-
-    if (items.length === 0) { errorCalif.value = 'Ingresa al menos una nota.'; return }
-
-    await apiFetch(`/clases/${claseId}/calificaciones`, {
-      method: 'POST',
-      body: { calificaciones: items },
-    })
+    if (!items.length) { errorCalif.value = 'Ingresa al menos una nota.'; return }
+    await apiFetch(`/clases/${claseId}/calificaciones`, { method: 'POST', body: { calificaciones: items } })
     toast('Calificaciones guardadas.')
-  } catch {
-    toast('No se pudo guardar las calificaciones.', 'error')
-  } finally {
-    guardandoCalif.value = false
-  }
+  } catch { toast('No se pudo guardar las calificaciones.', 'error') }
+  finally { guardandoCalif.value = false }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function toast(text, color = 'success') { snackbar.text = text; snackbar.color = color; snackbar.show = true }
-
 function formatFechaHora(fh) {
   if (!fh) return '—'
   return new Date(fh).toLocaleString('es-CO', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
-
 const totalAsistieron = computed(() => asistencias.value.filter(a => a.asistio).length)
 const porcentajeAsist = computed(() => !asistencias.value.length ? 0 : Math.round((totalAsistieron.value / asistencias.value.length) * 100))
-
 function notaColor(nota) {
   const n = parseFloat(nota)
   if (!nota && nota !== 0) return 'grey'
-  if (n >= 4) return 'success'
-  if (n >= 3) return 'warning'
-  return 'error'
+  return n >= 4 ? 'success' : n >= 3 ? 'warning' : 'error'
 }
-
 const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
 </script>
 
@@ -148,9 +127,7 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
 
         <div class="d-flex align-start justify-space-between flex-wrap ga-3 mb-4">
           <div>
-            <div class="d-flex align-center ga-2 mb-1">
-              <v-chip :color="clase?.tipo === 'presencial' ? 'blue' : 'purple'" size="small" rounded="lg">{{ clase?.tipo }}</v-chip>
-            </div>
+            <v-chip :color="clase?.tipo === 'presencial' ? 'blue' : 'purple'" size="small" rounded="lg" class="mb-1">{{ clase?.tipo }}</v-chip>
             <h1 class="text-h4 font-weight-bold mb-1">{{ clase?.tema }}</h1>
             <div class="text-body-2 text-grey">{{ formatFechaHora(clase?.fecha_hora) }} · {{ clase?.duracion_horas }}h</div>
           </div>
@@ -189,7 +166,9 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
                 <v-progress-linear :model-value="porcentajeAsist" :color="colorAccent" bg-color="rgba(0,0,0,0.08)" height="10" rounded class="flex-grow-1" />
                 <span class="text-body-2 font-weight-bold" style="min-width:40px">{{ porcentajeAsist }}%</span>
               </div>
-              <div class="d-flex ga-2 mb-4">
+
+              <!-- Acciones masivas solo si no es solo lectura -->
+              <div v-if="!soloLectura" class="d-flex ga-2 mb-4">
                 <v-btn size="small" variant="tonal" color="success" rounded="lg" @click="asistencias.forEach(a => a.asistio = true)">Todos presentes</v-btn>
                 <v-btn size="small" variant="tonal" color="grey" rounded="lg" @click="asistencias.forEach(a => a.asistio = false)">Limpiar</v-btn>
               </div>
@@ -200,17 +179,21 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
                   <v-avatar :color="item.asistio ? colorAccent : 'grey-lighten-1'" size="40" class="text-white font-weight-bold text-body-2">
                     {{ item.nombre.split(' ').map(n => n[0]).slice(0,2).join('') }}
                   </v-avatar>
-                  <div class="flex-grow-1">
-                    <div class="font-weight-medium text-body-2">{{ item.nombre }}</div>
-                  </div>
-                  <v-switch v-model="item.asistio" :color="colorAccent" hide-details density="compact" :label="item.asistio ? 'Presente' : 'Ausente'" inset />
+                  <div class="flex-grow-1 font-weight-medium text-body-2">{{ item.nombre }}</div>
+                  <!-- Switch solo si no es solo lectura -->
+                  <v-switch v-if="!soloLectura" v-model="item.asistio" :color="colorAccent" hide-details density="compact" :label="item.asistio ? 'Presente' : 'Ausente'" inset />
+                  <!-- Solo lectura: chip visual -->
+                  <v-chip v-else :color="item.asistio ? 'success' : 'error'" size="small" rounded="lg" class="font-weight-bold">
+                    {{ item.asistio ? 'Presente' : 'Ausente' }}
+                  </v-chip>
                 </div>
                 <v-expand-transition>
-                  <v-text-field v-if="!item.asistio" v-model="item.observacion" placeholder="Observación (opcional)" variant="outlined" rounded="lg" density="compact" hide-details class="mt-3" bg-color="white" />
+                  <v-text-field v-if="!soloLectura && !item.asistio" v-model="item.observacion" placeholder="Observación (opcional)" variant="outlined" rounded="lg" density="compact" hide-details class="mt-3" bg-color="white" />
+                  <div v-else-if="soloLectura && item.observacion" class="mt-2 text-caption text-grey-darken-1 pl-12">{{ item.observacion }}</div>
                 </v-expand-transition>
               </v-card>
 
-              <v-btn :color="colorAccent" rounded="lg" size="large" class="mt-4" prepend-icon="mdi-content-save" :loading="guardandoAsistencia" @click="guardarAsistencia">
+              <v-btn v-if="!soloLectura" :color="colorAccent" rounded="lg" size="large" class="mt-4" prepend-icon="mdi-content-save" :loading="guardandoAsistencia" @click="guardarAsistencia">
                 Guardar asistencia
               </v-btn>
             </template>
@@ -223,7 +206,10 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
               <p class="text-body-1 text-grey mt-3">No hay estudiantes inscritos.</p>
             </div>
             <template v-else>
-              <p class="text-body-2 text-grey mb-4">Notas de <strong>0.0 a 5.0</strong>. Deja en blanco si no aplica.</p>
+              <p class="text-body-2 text-grey mb-4">
+                <template v-if="!soloLectura">Notas de <strong>0.0 a 5.0</strong>. Deja en blanco si no aplica.</template>
+                <template v-else>Calificaciones registradas en esta clase.</template>
+              </p>
               <v-alert v-if="errorCalif" type="warning" variant="tonal" rounded="lg" class="mb-4" closable>{{ errorCalif }}</v-alert>
 
               <v-card v-for="item in calificaciones" :key="item.estudiante_id" rounded="xl" elevation="0" class="calif-row pa-4 mb-3">
@@ -233,15 +219,20 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
                   </v-avatar>
                   <div class="flex-grow-1">
                     <div class="font-weight-medium text-body-2 mb-2">{{ item.nombre }}</div>
-                    <div class="d-flex ga-3 flex-wrap">
+                    <!-- Editable si no es solo lectura -->
+                    <div v-if="!soloLectura" class="d-flex ga-3 flex-wrap">
                       <v-text-field v-model="item.nota" label="Nota (0-5)" type="number" min="0" max="5" step="0.1" variant="outlined" rounded="lg" density="compact" bg-color="white" hide-details style="max-width:140px" />
                       <v-text-field v-model="item.observacion" label="Observación" variant="outlined" rounded="lg" density="compact" bg-color="white" hide-details class="flex-grow-1" />
+                    </div>
+                    <!-- Solo lectura -->
+                    <div v-else class="text-caption text-grey-darken-1">
+                      {{ item.observacion || 'Sin observación' }}
                     </div>
                   </div>
                 </div>
               </v-card>
 
-              <v-btn :color="colorAccent" rounded="lg" size="large" class="mt-4" prepend-icon="mdi-content-save" :loading="guardandoCalif" :disabled="!calificacionesValidas" @click="guardarCalificaciones">
+              <v-btn v-if="!soloLectura" :color="colorAccent" rounded="lg" size="large" class="mt-4" prepend-icon="mdi-content-save" :loading="guardandoCalif" :disabled="!calificacionesValidas" @click="guardarCalificaciones">
                 Guardar calificaciones
               </v-btn>
             </template>
@@ -259,10 +250,10 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
 </template>
 
 <style scoped>
-.clase-hero { background: rgba(200,215,200,0.3); backdrop-filter: blur(4px); }
-.stat-mini { background: rgba(255,255,255,0.6); border-radius: 10px; padding: 6px 14px; }
-.asist-row { border: 1px solid transparent; transition: border-color 0.2s; }
+.clase-hero    { background: rgba(200,215,200,0.3); backdrop-filter: blur(4px); }
+.stat-mini     { background: rgba(255,255,255,0.6); border-radius: 10px; padding: 6px 14px; }
+.asist-row     { border: 1px solid transparent; transition: border-color 0.2s; }
 .asist-presente { background: rgba(57,169,0,0.08) !important; border-color: rgba(57,169,0,0.2) !important; }
 .asist-ausente  { background: rgba(255,255,255,0.6) !important; border-color: rgba(0,0,0,0.06) !important; }
-.calif-row { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); }
+.calif-row     { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); }
 </style>

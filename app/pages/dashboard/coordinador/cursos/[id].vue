@@ -2,5 +2,5 @@
 definePageMeta({ layout: 'coordinador' })
 </script>
 <template>
-  <CursoDetalle rol-layout="coordinador" color-accent="#1976D2" />
+  <CursoDetalle rol-layout="coordinador" color-accent="#1976D2" :solo-lectura="true" />
 </template>
