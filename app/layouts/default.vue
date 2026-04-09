@@ -2,14 +2,16 @@
   import { ref } from 'vue'
 
   const drawer = ref(false)
+  const route = useRoute()
+
 </script>
 
 <template>
   <v-app>
     <!-- ── NAVBAR ── -->
-    <v-app-bar color="#001826" elevation="2" height="64">
+    <v-app-bar color="#001826" elevation="2" height="64" v-if="!route.meta.hideNavbar">
       <v-app-bar-title>
-        <span class="text-white font-weight-bold text-h6">Gestión de cursos</span>
+        <span class="text-white font-weight-bold text-h6">Sena Smart Course</span>
       </v-app-bar-title>
 
       <template #append>
@@ -56,4 +58,5 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
 </style>

@@ -158,8 +158,8 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
           <!-- Asistencia -->
           <v-tabs-window-item value="asistencia">
             <div v-if="!estudiantes.length" class="text-center pa-12">
-              <v-icon size="64" color="grey-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-grey mt-3">No hay estudiantes inscritos.</p>
+              <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
+              <p class="text-body-1 text-black mt-3">No hay estudiantes inscritos.</p>
             </div>
             <template v-else>
               <div class="d-flex align-center ga-3 mb-5">
@@ -202,8 +202,8 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
           <!-- Calificaciones -->
           <v-tabs-window-item value="calificaciones">
             <div v-if="!estudiantes.length" class="text-center pa-12">
-              <v-icon size="64" color="grey-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-grey mt-3">No hay estudiantes inscritos.</p>
+              <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
+              <p class="text-body-1 text-black mt-3">No hay estudiantes inscritos.</p>
             </div>
             <template v-else>
               <p class="text-body-2 text-grey mb-4">

@@ -2,5 +2,5 @@
 definePageMeta({ layout: 'instructor' })
 </script>
 <template>
-  <CursoDetalle rol-layout="instructor" color-accent="#39A900" />
+  <shared-curso-detalle rol-layout="instructor" color-accent="#39A900" />
 </template>

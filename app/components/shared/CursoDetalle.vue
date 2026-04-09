@@ -128,8 +128,10 @@ async function generarFormulario() {
   try {
     const body      = expiraEn.value ? { expira_en: expiraEn.value + ':00' } : {}
     const resultado = await apiFetch(`/cursos/${cursoId}/formularios`, { method: 'POST', body })
+    const token = resultado.formulario.token
+    linkGenerado.value = `${window.location.origin}/inscripcion/${token}`
+    // linkGenerado.value = resultado.link
     formularios.value.unshift(resultado.formulario)
-    linkGenerado.value = resultado.link
     dialogLink.value   = true
     toast('¡Formulario generado!')
   } catch { toast('No se pudo generar el formulario.', 'error') }
@@ -167,7 +169,7 @@ async function cambiarEstado() {
       <!-- ── Hero ───────────────────────────────────────────────────── -->
       <div class="curso-hero pa-6 pb-0">
         <div class="d-flex align-center ga-2 mb-4 text-body-2 text-grey">
-          <nuxt-link :to="`${dashboardBase}/cursos`" class="text-grey text-decoration-none hover-link">Mis Cursos</nuxt-link>
+          <nuxt-link :to="`${dashboardBase}`" class="text-grey text-decoration-none hover-link">Mis Cursos</nuxt-link>
           <v-icon size="14">mdi-chevron-right</v-icon>
           <span class="text-truncate" style="max-width:280px">{{ curso.nombre }}</span>
         </div>
@@ -248,8 +250,8 @@ async function cambiarEstado() {
             </div>
 
             <div v-if="clases.length === 0" class="text-center pa-12">
-              <v-icon size="64" color="grey-lighten-1">mdi-calendar-blank-outline</v-icon>
-              <p class="text-body-1 text-grey mt-3">No hay clases registradas aún.</p>
+              <v-icon size="64" color="black-lighten-1">mdi-calendar-blank-outline</v-icon>
+              <p class="text-body-1 text-black mt-3">No hay clases registradas aún.</p>
             </div>
 
             <v-row v-else>
@@ -294,8 +296,8 @@ async function cambiarEstado() {
             </div>
 
             <div v-if="estudiantes.length === 0" class="text-center pa-12">
-              <v-icon size="64" color="grey-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-grey mt-3">Aún no hay estudiantes inscritos.</p>
+              <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
+              <p class="text-body-1 text-black mt-3">Aún no hay estudiantes inscritos.</p>
               <v-btn v-if="!soloLectura" :color="colorAccent" rounded="lg" class="mt-4" prepend-icon="mdi-link-plus" @click="tab = 'formularios'">
                 Ir a Inscripciones
               </v-btn>
@@ -352,8 +354,8 @@ async function cambiarEstado() {
             </v-card>
 
             <div v-if="formularios.length === 0" class="text-center pa-8">
-              <v-icon size="48" color="grey-lighten-1">mdi-link-off</v-icon>
-              <p class="text-body-2 text-grey mt-2">No hay formularios generados aún.</p>
+              <v-icon size="48" color="black-lighten-1">mdi-link-off</v-icon>
+              <p class="text-body-2 text-black mt-2">No hay formularios generados aún.</p>
             </div>
 
             <v-card v-for="form in formularios" :key="form.id" rounded="xl" elevation="0" class="form-item pa-4 mb-3">

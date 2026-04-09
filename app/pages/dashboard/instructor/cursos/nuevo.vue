@@ -4,8 +4,6 @@ import { ref, reactive, onMounted } from 'vue'
 definePageMeta({ layout: 'instructor' })
 
 const { apiFetch } = useApi()
-const router       = useRouter()
-
 const guardando  = ref(false)
 const error      = ref('')
 const regionales = ref([])
@@ -41,10 +39,13 @@ async function crearCurso() {
       ...(form.fecha_fin    && { fecha_fin: form.fecha_fin }),
     }
     const nuevo = await apiFetch('/cursos', { method: 'POST', body })
-    router.push(`/dashboard/instructor/cursos/${nuevo.id}`)
+
+    // Navegar al detalle del nuevo curso — el componente CursoDetalle
+    // carga sus propios datos via onMounted, así que no hay pantalla en blanco
+    await navigateTo(`/dashboard/instructor/cursos/${nuevo.id}`)
+
   } catch (err) {
-    const msg = err?.response?._data?.message
-    error.value = msg ?? 'No se pudo crear el curso. Verificá los datos.'
+    error.value = err?.response?._data?.message ?? 'No se pudo crear el curso.'
   } finally {
     guardando.value = false
   }
@@ -56,7 +57,6 @@ onMounted(cargarRegionales)
 <template>
   <div class="pa-6" style="max-width: 700px;">
 
-    <!-- Cabecera -->
     <div class="d-flex align-center ga-3 mb-6">
       <v-btn icon variant="text" size="small" to="/dashboard/instructor">
         <v-icon>mdi-arrow-left</v-icon>
@@ -69,38 +69,26 @@ onMounted(cargarRegionales)
 
     <v-card rounded="xl" elevation="0" class="pa-6" color="rgba(200,215,200,0.55)">
 
-      <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-5" closable>
+      <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-5" closable @click:close="error = ''">
         {{ error }}
       </v-alert>
 
-      <!-- Nombre -->
       <v-text-field
         v-model="form.nombre"
         label="Nombre del curso *"
-        variant="outlined"
-        rounded="lg"
-        density="comfortable"
-        bg-color="white"
-        class="mb-4"
-        placeholder="Ej: Docencia Universitaria"
+        variant="outlined" rounded="lg" density="comfortable" bg-color="white"
+        class="mb-4" placeholder="Ej: Docencia Universitaria"
       />
 
-      <!-- Descripción -->
       <v-textarea
         v-model="form.descripcion"
         label="Descripción"
-        variant="outlined"
-        rounded="lg"
-        density="comfortable"
-        bg-color="white"
-        class="mb-4"
-        rows="3"
-        auto-grow
+        variant="outlined" rounded="lg" density="comfortable" bg-color="white"
+        class="mb-4" rows="3" auto-grow
         placeholder="Describe brevemente el objetivo del curso..."
       />
 
       <v-row>
-        <!-- Regional -->
         <v-col cols="12" sm="6">
           <v-select
             v-model="form.regional_id"
@@ -108,62 +96,40 @@ onMounted(cargarRegionales)
             :items="regionales"
             item-title="nombre"
             item-value="id"
-            variant="outlined"
-            rounded="lg"
-            density="comfortable"
-            bg-color="white"
+            variant="outlined" rounded="lg" density="comfortable" bg-color="white"
             no-data-text="Cargando regionales..."
           />
         </v-col>
-
-        <!-- Horas requeridas -->
         <v-col cols="12" sm="6">
           <v-text-field
             v-model.number="form.horas_requeridas"
             label="Horas requeridas *"
-            type="number"
-            min="1"
-            variant="outlined"
-            rounded="lg"
-            density="comfortable"
-            bg-color="white"
+            type="number" min="1"
+            variant="outlined" rounded="lg" density="comfortable" bg-color="white"
             prepend-inner-icon="mdi-clock-outline"
           />
         </v-col>
-
-        <!-- Fecha inicio -->
         <v-col cols="12" sm="6">
           <v-text-field
             v-model="form.fecha_inicio"
             label="Fecha de inicio *"
             type="date"
-            variant="outlined"
-            rounded="lg"
-            density="comfortable"
-            bg-color="white"
+            variant="outlined" rounded="lg" density="comfortable" bg-color="white"
           />
         </v-col>
-
-        <!-- Fecha fin -->
         <v-col cols="12" sm="6">
           <v-text-field
             v-model="form.fecha_fin"
             label="Fecha de finalización (opcional)"
             type="date"
-            variant="outlined"
-            rounded="lg"
-            density="comfortable"
-            bg-color="white"
+            variant="outlined" rounded="lg" density="comfortable" bg-color="white"
           />
         </v-col>
       </v-row>
 
-      <!-- Acciones -->
       <div class="d-flex ga-3 mt-2">
         <v-btn
-          color="#39A900"
-          rounded="lg"
-          size="large"
+          color="#39A900" rounded="lg" size="large"
           :loading="guardando"
           :disabled="!form.nombre || !form.regional_id || !form.fecha_inicio"
           @click="crearCurso"

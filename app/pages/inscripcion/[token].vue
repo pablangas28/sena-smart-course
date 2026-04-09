@@ -4,7 +4,10 @@
 
 import { ref, reactive, computed } from 'vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  hideNavbar: true
+})
 
 const route    = useRoute()
 const router   = useRouter()

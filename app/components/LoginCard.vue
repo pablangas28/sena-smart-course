@@ -17,7 +17,7 @@ const showPass = ref(false)
       
       <!-- Header -->
       <div class="text-center mb-8">
-        <h2 class="text-h4 font-weight-bold text-white mb-3">Bienvenido</h2>
+        <h2 class="zoom-text text-h4 font-weight-bold text-white mb-3">Bienvenido</h2>
         <div class="line" />
       </div>
 
@@ -131,5 +131,15 @@ const showPass = ref(false)
 .link {
   color: white;
   text-decoration: none;
+}
+
+/* Zoom por hover */
+.zoom-text {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.zoom-text:hover {
+  transform: scale(1.5);
 }
 </style>

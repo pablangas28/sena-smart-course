@@ -36,7 +36,7 @@ const tecnologias = [
       <div class="hero-section text-center mb-12">
         <div class="d-flex justify-center mb-4">
           <div class="sena-badge">
-            <img src="/images/sena-sideBar.png" width="52" height="52" />
+            <img src="/images/sena-sideBar.png" width="52" height="52"  alt="Logo de SENA Smart Course"/>
           </div>
         </div>
         <h1 class="text-h3 font-weight-black mb-2">

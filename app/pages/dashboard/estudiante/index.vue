@@ -66,9 +66,9 @@ function porcentaje(curso) {
     <template v-else>
       <!-- Sin cursos -->
       <div v-if="progreso.length === 0" class="text-center pa-16">
-        <v-icon size="80" color="grey-lighten-1">mdi-book-open-page-variant-outline</v-icon>
-        <h3 class="text-h6 font-weight-medium text-grey mt-4">No estás inscrito en ningún curso</h3>
-        <p class="text-body-2 text-grey mt-2">
+        <v-icon size="80" color="black-lighten-1">mdi-book-open-page-variant-outline</v-icon>
+        <h3 class="text-h6 font-weight-medium text-black mt-4">No estás inscrito en ningún curso</h3>
+        <p class="text-body-2 text-black mt-2">
           Cuando un instructor o aliado te comparta un link de inscripción, podrás unirte a un curso.
         </p>
       </div>
