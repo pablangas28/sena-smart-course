@@ -1,36 +1,34 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({ layout: 'estudiante' })
 
 const route        = useRoute()
+const auth         = useAuthStore()
 const { apiFetch } = useApi()
-const registroId   = route.params.id  // ID del registro_estudiante
 
-const registro     = ref(null)
-const asistencias  = ref(null)
+const cursoId      = route.params.id 
+const estudianteId = auth.user?.id
+
+const asistencias    = ref(null)
 const calificaciones = ref(null)
-const loading      = ref(true)
-const error        = ref('')
-const tab          = ref('asistencia')
+const loading        = ref(true)
+const error          = ref('')
+const tab            = ref('asistencia')
 
 async function cargarProgreso() {
   loading.value = true
   try {
-    // Primero cargamos el registro para saber el curso_id y user_id
-    const reg = await apiFetch(`/estudiantes/${registroId}`)
-    registro.value = reg
-
-    const cursoId      = reg.curso_id
-    const estudianteId = reg.user_id
-
     const [asist, calif] = await Promise.all([
       apiFetch(`/cursos/${cursoId}/estudiantes/${estudianteId}/asistencia`),
       apiFetch(`/cursos/${cursoId}/estudiantes/${estudianteId}/calificaciones`),
     ])
+    
     asistencias.value    = asist
     calificaciones.value = calif
-  } catch {
+  } catch (err) {
+    console.error("Error cargando detalles del curso:", err)
     error.value = 'No se pudo cargar tu progreso en este curso.'
   } finally {
     loading.value = false

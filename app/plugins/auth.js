@@ -1,7 +1,10 @@
 export default defineNuxtPlugin(async () => {
-  const auth = useAuthStore()
+  const auth  = useAuthStore()
+  const route = useRoute()
 
-  // Solo actuar si hay token pero user no está en memoria
+  const rutasSinRestaurar = ['/login', '/registro']
+  if (rutasSinRestaurar.some(r => route.path.startsWith(r))) return
+
   if (auth.token && !auth.user) {
     await auth.fetchMe()
   }

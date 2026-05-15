@@ -8,7 +8,7 @@ const props = defineProps({
 })
 
 const route        = useRoute()
-const { apiFetch } = useApi()
+// const { apiFetch } = useApi()
 const cursoId      = route.params.id
 const claseId      = route.params.claseId
 
@@ -50,14 +50,15 @@ async function cargarTodo() {
       nota:          califMap[reg.user_id]?.nota ?? '',
       observacion:   califMap[reg.user_id]?.observacion ?? '',
     }))
-  } catch {
+  } catch(error) {
+    console.error(err)
     error.value = 'No se pudo cargar la información de la clase.'
   } finally {
     loading.value = false
   }
 }
 
-onMounted(cargarTodo)
+// onMounted(cargarTodo)
 
 // ── Asistencia ────────────────────────────────────────────────────────────
 const guardandoAsistencia = ref(false)

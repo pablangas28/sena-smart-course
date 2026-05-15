@@ -17,7 +17,7 @@ const showPass = ref(false)
       
       <!-- Header -->
       <div class="text-center mb-8">
-        <h2 class="zoom-text text-h4 font-weight-bold text-white mb-3">Bienvenido</h2>
+        <h2 class="zoom-text text-h4 font-weight-bold text-white mb-3">Bienvenido/a</h2>
         <div class="line" />
       </div>
 

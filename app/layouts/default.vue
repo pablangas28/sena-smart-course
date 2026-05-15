@@ -53,7 +53,7 @@
 
 <style>
 .sena-bg {
-  background-image: url('/images/sena-bg.png');
+  background-image: url('/images/sena-bg.pngn');
   background-size: 50%;
   background-position: center;
   background-repeat: no-repeat;

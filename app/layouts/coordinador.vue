@@ -111,7 +111,7 @@ const iniciales = computed(() => {
 <style scoped>
 .sena-bg {
   min-height: calc(100vh - 56px);
-  background-image: url('/images/sena-bg.png');
+  background-image: url('/images/sena-bg.pngg');
   background-size: 40%;
   background-position: center;
   background-repeat: no-repeat;

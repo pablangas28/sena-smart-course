@@ -22,7 +22,9 @@ async function cargarProgreso() {
   }
 }
 
-onMounted(cargarProgreso)
+onMounted(
+  cargarProgreso
+)
 
 const cursosActivos = computed(() => progreso.value.filter(r => r.estado === 'activo'))
 
@@ -141,7 +143,7 @@ function porcentaje(curso) {
               <v-btn
                 block size="small" variant="tonal" color="#39A900"
                 rounded="lg" class="mt-4"
-                :to="`/dashboard/estudiante/cursos/${reg.id}`"
+                :to="`/dashboard/estudiante/cursos/${reg.curso?.id ?? reg.curso_id}`"
               >
                 Ver mis notas y asistencias
               </v-btn>

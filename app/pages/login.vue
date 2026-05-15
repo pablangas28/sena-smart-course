@@ -4,10 +4,9 @@ import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({ layout: 'default' })
 
-const auth   = useAuthStore()
-const router = useRouter()
+const auth = useAuthStore()
 
-const form = reactive({ email: '', password: '' })
+const form    = reactive({ email: '', password: '' })
 const loading = ref(false)
 const error   = ref('')
 
@@ -20,12 +19,11 @@ async function handleLogin() {
   const { ok, route, message } = await auth.login(form.email, form.password)
 
   if (ok) {
-    router.push(route)
+    await navigateTo(route, { replace: true })
   } else {
-    error.value = message
+    error.value   = message
+    loading.value = false
   }
-
-  loading.value = false
 }
 </script>
 

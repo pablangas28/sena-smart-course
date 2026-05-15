@@ -3,14 +3,11 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 
 const auth   = useAuthStore()
-const drawer = ref(true)
+const drawer = ref(false)
 
 const navItems = [
-  { key: 'inicio',      label: 'Inicio',            icon: 'mdi-view-dashboard-outline',      to: '/dashboard/aliado' },
-  { key: 'cursos',      label: 'Cursos',             icon: 'mdi-book-education-outline',       to: '/dashboard/aliado/cursos' },
-  { key: 'estudiantes', label: 'Estudiantes',        icon: 'mdi-account-group-outline',        to: '/dashboard/aliado/estudiantes' },
-  { key: 'formulario',  label: 'Nuevo Formulario',   icon: 'mdi-file-document-plus-outline',   to: '/dashboard/aliado/formulario' },
-  { key: 'perfil',      label: 'Mi Perfil',          icon: 'mdi-account-circle-outline',       to: '/dashboard/aliado/perfil' },
+  { key: 'inicio',   label: 'Mis Cursos',  icon: 'mdi-book-open-outline',         to: '/dashboard/estudiante' },
+  { key: 'perfil',   label: 'Mi Perfil',   icon: 'mdi-account-circle-outline',     to: '/dashboard/estudiante/perfil' },
 ]
 
 const iniciales = computed(() => {
@@ -21,39 +18,66 @@ const iniciales = computed(() => {
 
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" permanent color="#0a1628" width="220">
 
-      <div class="d-flex align-center justify-center pt-5 pb-3">
-        <img src="/images/sena-sideBar.png" width="48" height="48" />
-      </div>
-      <div class="text-center text-white text-caption font-weight-bold tracking-widest mb-2 opacity-50">
-        SMARTCOURSE
-      </div>
-      <v-divider color="rgba(255,255,255,0.1)" class="mb-4" />
+    <!-- Top navbar principal -->
+    <v-app-bar color="#0a1628" elevation="2" height="64">
+      <template #prepend>
+        <div class="d-flex align-center pl-4">
+          <img src="/images/sena-sideBar.png" width="36" height="36" class="mr-3" />
+          <span class="text-white font-weight-bold text-body-1 d-none d-sm-block">SmartCourse</span>
+        </div>
+      </template>
 
-      <!-- Perfil -->
-      <div class="px-4 mb-5">
-        <v-card
-          rounded="xl" color="rgba(255,255,255,0.06)" class="pa-3 d-flex align-center ga-3" flat
-          to="/dashboard/aliado/perfil" style="cursor:pointer;"
+      <!-- Links desktop -->
+      <div class="d-none d-sm-flex align-center ml-4 ga-1">
+        <v-btn
+          v-for="item in navItems"
+          :key="item.key"
+          :to="item.to"
+          variant="text"
+          color="white"
+          :prepend-icon="item.icon"
+          size="small"
+          rounded="lg"
+          active-color="#39A900"
         >
-          <v-avatar color="#6A1B9A" size="40" class="font-weight-bold text-white flex-shrink-0">
+          {{ item.label }}
+        </v-btn>
+      </div>
+
+      <v-spacer />
+
+      <template #append>
+        <!-- Avatar + nombre desktop -->
+        <div class="d-none d-sm-flex align-center ga-3 mr-4">
+          <div class="text-right">
+            <div class="text-white text-body-2 font-weight-medium">{{ auth.user?.nombre }}</div>
+            <div class="text-caption" style="color:rgba(255,255,255,0.5)">Aprendiz</div>
+          </div>
+          <v-avatar color="#39A900" size="36" class="text-white font-weight-bold text-body-2" style="cursor:pointer;" @click="navigateTo('/dashboard/estudiante/perfil')">
             {{ iniciales }}
           </v-avatar>
-          <div class="overflow-hidden">
-            <div class="text-white text-body-2 font-weight-semibold text-truncate">
-              {{ auth.user?.nombre }} {{ auth.user?.apellidos }}
-            </div>
-            <v-chip color="#7B1FA2" size="x-small" rounded="lg" class="font-weight-bold text-uppercase mt-1">
-              Aliado
-            </v-chip>
-          </div>
-        </v-card>
-      </div>
+          <v-btn icon variant="text" color="rgba(255,255,255,0.6)" size="small" @click="auth.logout()">
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </div>
 
-      <!-- Nav -->
-      <div class="px-3">
-        <div class="text-white text-caption font-weight-bold mb-2 px-2 opacity-40 tracking-widest">MENÚ</div>
+        <!-- Hamburguesa móvil -->
+        <v-app-bar-nav-icon class="d-flex d-sm-none text-white" @click="drawer = !drawer" />
+      </template>
+    </v-app-bar>
+
+    <!-- Drawer móvil -->
+    <v-navigation-drawer v-model="drawer" temporary color="#0a1628">
+      <div class="pa-4">
+        <div class="d-flex align-center ga-3 mb-4 pt-2">
+          <v-avatar color="#39A900" size="44" class="text-white font-weight-bold">{{ iniciales }}</v-avatar>
+          <div>
+            <div class="text-white font-weight-semibold">{{ auth.user?.nombre }} {{ auth.user?.apellidos }}</div>
+            <div class="text-caption" style="color:rgba(255,255,255,0.5)">Aprendiz / Estudiante</div>
+          </div>
+        </div>
+        <v-divider color="rgba(255,255,255,0.1)" class="mb-3" />
         <v-list nav density="compact" class="pa-0">
           <v-list-item
             v-for="item in navItems"
@@ -61,46 +85,24 @@ const iniciales = computed(() => {
             :to="item.to"
             :prepend-icon="item.icon"
             rounded="lg"
-            active-color="#AB47BC"
+            active-color="#39A900"
             class="nav-item mb-1"
+            @click="drawer = false"
           >
             <template #title>
               <span class="text-body-2 font-weight-medium">{{ item.label }}</span>
             </template>
           </v-list-item>
         </v-list>
+        <v-divider color="rgba(255,255,255,0.1)" class="my-3" />
+        <v-btn block variant="tonal" color="error" rounded="lg" prepend-icon="mdi-logout" size="small" @click="auth.logout()">
+          Cerrar sesión
+        </v-btn>
       </div>
-
-      <template #append>
-        <div class="px-4 pb-4">
-          <div v-if="auth.user?.regional" class="d-flex align-center ga-2 px-2 mb-3 text-caption text-white opacity-40">
-            <v-icon size="14">mdi-map-marker-outline</v-icon>
-            <span class="text-truncate">{{ auth.user.regional.nombre }}</span>
-          </div>
-          <v-divider color="rgba(255,255,255,0.1)" class="mb-3" />
-          <v-btn block variant="tonal" color="error" rounded="lg" prepend-icon="mdi-logout" size="small" @click="auth.logout()">
-            Cerrar sesión
-          </v-btn>
-        </div>
-      </template>
     </v-navigation-drawer>
 
     <v-main>
-      <v-app-bar color="#0a1628" elevation="0" height="56" border="b">
-        <template #prepend>
-          <v-app-bar-nav-icon color="white" @click="drawer = !drawer" />
-        </template>
-        <v-app-bar-title>
-          <span class="text-white text-body-1 font-weight-semibold">Gestión de Cursos Complementarios</span>
-        </v-app-bar-title>
-        <template #append>
-          <v-chip color="rgba(106,27,154,0.2)" size="small" class="mr-3 font-weight-bold" prepend-icon="mdi-handshake-outline" style="color:#AB47BC">
-            Aliado
-          </v-chip>
-        </template>
-      </v-app-bar>
-
-      <div class="sena-bg page-content">
+      <div class="sena-bg">
         <slot />
       </div>
     </v-main>
@@ -109,16 +111,13 @@ const iniciales = computed(() => {
 
 <style scoped>
 .sena-bg {
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 64px);
   background-image: url('/images/sena-bg.png');
   background-size: 40%;
   background-position: center;
   background-repeat: no-repeat;
 }
-.nav-item { color: rgba(255,255,255,0.65) !important; transition: background 0.2s; }
-.nav-item:hover { background-color: rgba(255,255,255,0.06) !important; color: white !important; }
-.v-list-item--active.nav-item { background-color: rgba(171,71,188,0.15) !important; color: #AB47BC !important; }
-.tracking-widest { letter-spacing: 0.12em; }
-.opacity-40 { opacity: 0.4; }
-.opacity-50 { opacity: 0.5; }
+.nav-item { color: rgba(255,255,255,0.65) !important; }
+.nav-item:hover { background-color: rgba(255,255,255,0.06) !important; }
+.v-list-item--active.nav-item { background-color: rgba(57,169,0,0.15) !important; color: #39A900 !important; }
 </style>

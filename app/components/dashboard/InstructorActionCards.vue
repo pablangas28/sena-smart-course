@@ -43,7 +43,7 @@ defineEmits(['action'])
 
 const cards = [
   { key: 'cursos',      label: 'Consultar cursos',      icon: 'mdi-bank' },
-  { key: 'estudiantes', label: 'Consultar Estudiantes',  icon: 'mdi-account-group' },
+  { key: 'estudiantes', label: 'Consultar Aprendices',  icon: 'mdi-account-group' },
   { key: 'formulario',  label: 'Crear formulario',       icon: 'mdi-file-document-plus' },
 ]
 </script>

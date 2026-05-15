@@ -207,7 +207,7 @@ async function cambiarEstado() {
         <v-row class="mb-0" dense>
           <v-col v-for="(s, i) in [
             { label: 'Clases',      value: clases.length },
-            { label: 'Estudiantes', value: estudiantes.length },
+            { label: 'Aprendices', value: estudiantes.length },
             { label: 'Horas',       value: `${curso.horas_cumplidas}/${curso.horas_requeridas}h` },
             { label: 'Progreso',    value: `${porcentajeHoras}%` },
           ]" :key="i" cols="6" sm="3">
@@ -230,7 +230,7 @@ async function cambiarEstado() {
         <!-- Tabs — si soloLectura, esconder tab de formularios -->
         <v-tabs v-model="tab" :color="colorAccent" bg-color="transparent">
           <v-tab value="clases"><v-icon start size="18">mdi-calendar-clock</v-icon>Clases ({{ clases.length }})</v-tab>
-          <v-tab value="estudiantes"><v-icon start size="18">mdi-account-group-outline</v-icon>Estudiantes ({{ estudiantes.length }})</v-tab>
+          <v-tab value="estudiantes"><v-icon start size="18">mdi-account-group-outline</v-icon>Aprendices ({{ estudiantes.length }})</v-tab>
           <v-tab v-if="!soloLectura" value="formularios"><v-icon start size="18">mdi-link-variant</v-icon>Inscripciones</v-tab>
         </v-tabs>
       </div>
@@ -291,13 +291,13 @@ async function cambiarEstado() {
           <!-- ══ ESTUDIANTES ═══════════════════════════════════════════ -->
           <v-tabs-window-item value="estudiantes">
             <div class="d-flex justify-space-between align-center mb-4">
-              <h3 class="text-h6 font-weight-bold">Estudiantes inscritos</h3>
+              <h3 class="text-h6 font-weight-bold">Aprendices inscritos</h3>
               <v-chip color="grey" variant="tonal" size="small">{{ estudiantes.length }} registrados</v-chip>
             </div>
 
             <div v-if="estudiantes.length === 0" class="text-center pa-12">
               <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-black mt-3">Aún no hay estudiantes inscritos.</p>
+              <p class="text-body-1 text-black mt-3">Aún no hay Aprendices inscritos.</p>
               <v-btn v-if="!soloLectura" :color="colorAccent" rounded="lg" class="mt-4" prepend-icon="mdi-link-plus" @click="tab = 'formularios'">
                 Ir a Inscripciones
               </v-btn>
@@ -306,7 +306,7 @@ async function cambiarEstado() {
             <v-table v-else rounded="xl" class="estudiantes-table">
               <thead>
                 <tr>
-                  <th>Estudiante</th>
+                  <th>Aprendiz</th>
                   <th>Celular</th>
                   <th>Estado</th>
                   <th v-if="!soloLectura" class="text-center">Acciones</th>
@@ -342,7 +342,7 @@ async function cambiarEstado() {
           <v-tabs-window-item v-if="!soloLectura" value="formularios">
             <div class="mb-5">
               <h3 class="text-h6 font-weight-bold mb-1">Formularios de inscripción</h3>
-              <p class="text-body-2 text-grey">Genera links únicos para que los estudiantes se inscriban.</p>
+              <p class="text-body-2 text-grey">Genera links únicos para que los aprendices se inscriban.</p>
             </div>
 
             <v-card rounded="xl" elevation="0" class="pa-5 mb-5 generador-card">

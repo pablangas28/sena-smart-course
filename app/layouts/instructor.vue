@@ -7,7 +7,7 @@ const drawer = ref(true)
 
 const navItems = [
   { key: 'cursos',      label: 'Mis Cursos',       icon: 'mdi-book-education-outline', to: '/dashboard/instructor' },
-  { key: 'estudiantes', label: 'Estudiantes',       icon: 'mdi-account-group-outline',  to: '/dashboard/instructor/estudiantes' },
+  { key: 'estudiantes', label: 'Aprendices',       icon: 'mdi-account-group-outline',  to: '/dashboard/instructor/estudiantes' },
   { key: 'formulario',  label: 'Nuevo Formulario',  icon: 'mdi-file-document-plus-outline', to: '/dashboard/instructor/formulario' },
   { key: 'perfil',  label: 'Mi Perfil',  icon: 'mdi-account-circle-outline', to: '/dashboard/instructor/perfil' },
 ]
@@ -160,7 +160,7 @@ const iniciales = computed(() => {
 <style scoped>
 .sena-bg {
   min-height: calc(100vh - 56px);
-  background-image: url('/images/sena-bg.png');
+  background-image: url('/images/sena-bg.pngg');
   background-size: 40%;
   background-position: center;
   background-repeat: no-repeat;
