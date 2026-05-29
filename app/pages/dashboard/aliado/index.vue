@@ -40,7 +40,7 @@ function porcentaje(curso) {
 
 const accesos = [
   { label: 'Mis Cursos',          icon: 'mdi-book-education-outline',       to: '/dashboard/aliado/cursos',      color: '#7B1FA2' },
-  { label: 'Ver Estudiantes',     icon: 'mdi-account-group-outline',         to: '/dashboard/aliado/estudiantes', color: '#1976D2' },
+  { label: 'Ver Aprendices',     icon: 'mdi-account-group-outline',         to: '/dashboard/aliado/estudiantes', color: '#1976D2' },
   { label: 'Nuevo Formulario',    icon: 'mdi-file-document-plus-outline',    to: '/dashboard/aliado/formulario',  color: '#39A900' },
 ]
 </script>

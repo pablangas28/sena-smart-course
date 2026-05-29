@@ -12,6 +12,7 @@ const reportes   = ref([])
 const loading    = ref(true)
 const error      = ref('')
 const busqueda   = ref('')
+const token      = useCookie('token')
 
 async function cargarReportes() {
   loading.value = true
@@ -37,21 +38,39 @@ const totalActivos    = computed(() => reportes.value.reduce((a, r) => a + (r.ac
 const totalDesertados = computed(() => reportes.value.reduce((a, r) => a + (r.desertados ?? 0), 0))
 const totalGraduados  = computed(() => reportes.value.reduce((a, r) => a + (r.graduados ?? 0), 0))
 
-function descargarPdf(cursoId, tipo = 'pdf') {
+// descargar PDF
+async function descargarPdf(cursoId, tipo = 'pdf') {
   const rutas = {
-    pdf:         `/reportes/cursos/${cursoId}/pdf`,
-    asistencia:  `/reportes/cursos/${cursoId}/asistencia-pdf`,
+    pdf:            `/reportes/cursos/${cursoId}/pdf`,
+    asistencia:     `/reportes/cursos/${cursoId}/asistencia-pdf`,
     calificaciones: `/reportes/cursos/${cursoId}/calificaciones-pdf`,
   }
-  const url  = `${config.public.apiBase}${rutas[tipo]}`
-  const link = document.createElement('a')
-  link.href   = url
-  link.target = '_blank'
-  // Adjuntar token como query param no es lo ideal, pero es la opción más simple
-  // si el backend lo acepta; si no, usar fetch con blob
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+
+  const url = `${config.public.apiBase}${rutas[tipo]}`
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token.value}`,
+        'Accept': 'application/pdf',
+      }
+    })
+
+    if (!response.ok) throw new Error(`Error ${response.status}`)
+
+    const blob = await response.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = objectUrl
+    link.download = `reporte-${tipo}-${cursoId}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(objectUrl)
+
+  } catch (err) {
+    console.error('Error descargando PDF:', err)
+  }
 }
 
 const estadoColor = { activo: 'success', finalizado: 'blue-grey', cancelado: 'error' }
@@ -68,7 +87,7 @@ const estadoColor = { activo: 'success', finalizado: 'blue-grey', cancelado: 'er
     <!-- Stats globales -->
     <v-row class="mb-6">
       <v-col v-for="(s, i) in [
-        { label: 'Estudiantes activos',    value: totalActivos,    color: '#39A900', icon: 'mdi-account-check-outline' },
+        { label: 'Aprendices activos',    value: totalActivos,    color: '#39A900', icon: 'mdi-account-check-outline' },
         { label: 'Desertados',             value: totalDesertados, color: 'error',   icon: 'mdi-account-off-outline' },
         { label: 'Graduados',              value: totalGraduados,  color: '#1976D2', icon: 'mdi-school-outline' },
         { label: 'Total cursos',           value: reportes.length, color: '#7B1FA2', icon: 'mdi-book-multiple-outline' },

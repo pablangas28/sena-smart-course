@@ -8,7 +8,7 @@ const props = defineProps({
 })
 
 const route        = useRoute()
-// const { apiFetch } = useApi()
+const { apiFetch } = useApi()
 const cursoId      = route.params.id
 const claseId      = route.params.claseId
 
@@ -50,7 +50,7 @@ async function cargarTodo() {
       nota:          califMap[reg.user_id]?.nota ?? '',
       observacion:   califMap[reg.user_id]?.observacion ?? '',
     }))
-  } catch(error) {
+  } catch(err) {
     console.error(err)
     error.value = 'No se pudo cargar la información de la clase.'
   } finally {
@@ -58,7 +58,7 @@ async function cargarTodo() {
   }
 }
 
-// onMounted(cargarTodo)
+onMounted(cargarTodo)
 
 // ── Asistencia ────────────────────────────────────────────────────────────
 const guardandoAsistencia = ref(false)
@@ -160,7 +160,7 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
           <v-tabs-window-item value="asistencia">
             <div v-if="!estudiantes.length" class="text-center pa-12">
               <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-black mt-3">No hay estudiantes inscritos.</p>
+              <p class="text-body-1 text-black mt-3">No hay aprendices inscritos.</p>
             </div>
             <template v-else>
               <div class="d-flex align-center ga-3 mb-5">
@@ -204,7 +204,7 @@ const dashboardBase = computed(() => `/dashboard/${props.rolLayout}`)
           <v-tabs-window-item value="calificaciones">
             <div v-if="!estudiantes.length" class="text-center pa-12">
               <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
-              <p class="text-body-1 text-black mt-3">No hay estudiantes inscritos.</p>
+              <p class="text-body-1 text-black mt-3">No hay aprendices inscritos.</p>
             </div>
             <template v-else>
               <p class="text-body-2 text-grey mb-4">

@@ -76,7 +76,7 @@ function formatFecha(f) {
         <v-col v-for="(stat, i) in [
           { label: 'Total Cursos',     value: totalCursos,      icon: 'mdi-book-multiple-outline',   color: '#39A900' },
           { label: 'Cursos Activos',   value: cursosActivos,    icon: 'mdi-play-circle-outline',     color: '#1976D2' },
-          { label: 'Estudiantes',      value: totalEstudiantes, icon: 'mdi-account-group-outline',   color: '#7B1FA2' },
+          { label: 'Aprendices',      value: totalEstudiantes, icon: 'mdi-account-group-outline',   color: '#7B1FA2' },
           { label: 'Graduados',        value: totalGraduados,   icon: 'mdi-school-outline',          color: '#E65100' },
         ]" :key="i" cols="6" sm="3">
           <v-card rounded="xl" elevation="0" class="stat-card pa-5 text-center">
@@ -122,7 +122,7 @@ function formatFecha(f) {
             <th>Regional</th>
             <th>Inicio</th>
             <th>Estado</th>
-            <th class="text-center">Estudiantes</th>
+            <th class="text-center">Aprendices</th>
           </tr>
         </thead>
         <tbody>

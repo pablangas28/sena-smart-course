@@ -64,7 +64,7 @@ function limpiarToken() {
                   <v-icon color="#39A900" size="18">mdi-school-outline</v-icon>
                 </v-avatar>
                 <div>
-                  <div class="text-body-2 font-weight-bold text-white">Aprendiz / Estudiante</div>
+                  <div class="text-body-2 font-weight-bold text-white">Aprendiz</div>
                   <div class="text-caption" style="color:rgba(255,255,255,0.5);">
                     Recibe un link de inscripción de tu instructor o aliado e ingresa el código aquí.
                   </div>

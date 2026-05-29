@@ -8,6 +8,7 @@ modules: ["@pinia/nuxt", "@vueuse/nuxt", "vuetify-nuxt-module", "@nuxt/icon"],
   runtimeConfig: {
     public: {
       apiBase: 'https://sena-smart-course-back-production.up.railway.app/api',
+      recaptchaSiteKey: '6LeA0vwsAAAAAMgfN_0Ccq5OKkXxm5wtT03Ph5G9',
     },
   },
   // Diseño

@@ -56,7 +56,7 @@ const cursoSelNombre = computed(() => cursos.value.find(c => c.id === cursoSel.v
     <div class="mb-6">
       <h2 class="text-h5 font-weight-bold">Generar Formulario de Inscripción</h2>
       <p class="text-body-2 text-grey-darken-1 mt-1">
-        Crea un link único para que los estudiantes se inscriban en un curso.
+        Crea un link único para que los aprendices se inscriban en un curso.
       </p>
     </div>
 

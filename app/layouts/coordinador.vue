@@ -104,6 +104,7 @@ const iniciales = computed(() => {
       <div class="sena-bg page-content">
         <slot />
       </div>
+      <app-footer/>
     </v-main>
   </v-app>
 </template>

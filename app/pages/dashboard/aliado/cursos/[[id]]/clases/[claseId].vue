@@ -1,4 +1,6 @@
 <script setup>
+import ClaseDetalle from '~/components/shared/ClaseDetalle.vue';
+
 definePageMeta({ layout: 'aliado' })
 </script>
 <template>

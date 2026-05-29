@@ -28,7 +28,7 @@ async function cargarTodo() {
     )
     estudiantes.value = resultados.flat()
   } catch {
-    error.value = 'No se pudieron cargar los estudiantes.'
+    error.value = 'No se pudieron cargar los aprendices.'
   } finally {
     loading.value = false
   }
@@ -73,13 +73,13 @@ async function cambiarEstado(reg, nuevoEstado) {
 
     <div class="d-flex align-center justify-space-between flex-wrap ga-3 mb-6">
       <div>
-        <h2 class="text-h5 font-weight-bold">Estudiantes</h2>
+        <h2 class="text-h5 font-weight-bold">Aprendices</h2>
         <p class="text-body-2 text-grey-darken-1 mt-1">
           Todos los aprendices inscritos en tus cursos.
         </p>
       </div>
       <v-chip variant="tonal" color="#39A900" size="small">
-        {{ estudiantesFiltrados.length }} estudiante{{ estudiantesFiltrados.length !== 1 ? 's' : '' }}
+        {{ estudiantesFiltrados.length }} aprendiz{{ estudiantesFiltrados.length !== 1 ? 's' : '' }}
       </v-chip>
     </div>
 
@@ -110,7 +110,7 @@ async function cambiarEstado(reg, nuevoEstado) {
       <v-icon size="64" color="black-lighten-1">mdi-account-off-outline</v-icon>
       <p class="text-body-1 text-black mt-3">
         {{ estudiantes.length === 0
-          ? 'Aún no hay estudiantes inscritos en tus cursos.'
+          ? 'Aún no hay aprendices inscritos en tus cursos.'
           : 'No se encontraron resultados.' }}
       </p>
     </div>
@@ -119,7 +119,7 @@ async function cambiarEstado(reg, nuevoEstado) {
       <v-table>
         <thead>
           <tr>
-            <th>Estudiante</th>
+            <th>Aprendiz</th>
             <th class="d-none d-sm-table-cell">Curso</th>
             <th>Estado</th>
             <th class="text-center">Cambiar estado</th>

@@ -416,7 +416,7 @@ async function cambiarEstado() {
       <v-card rounded="xl" class="pa-6">
         <div class="d-flex align-center ga-3 mb-4">
           <v-avatar color="success" size="44"><v-icon color="white">mdi-check</v-icon></v-avatar>
-          <div><div class="text-h6 font-weight-bold">¡Formulario generado!</div><div class="text-body-2 text-grey">Compártelo con los estudiantes</div></div>
+          <div><div class="text-h6 font-weight-bold">¡Formulario generado!</div><div class="text-body-2 text-grey">Compártelo con los aprendices</div></div>
         </div>
         <v-card color="rgba(57,169,0,0.08)" rounded="lg" class="pa-3 mb-4">
           <div class="text-caption text-grey mb-1">Link de inscripción</div>

@@ -46,6 +46,7 @@
       <div class="sena-bg">
         <slot />
       </div>
+      <app-footer/>
     </v-main>
   </v-app>
 </template>

@@ -109,7 +109,7 @@ function toast(text, color = 'success') {
 }
 
 const rolColor   = { instructor: '#39A900', aliado: '#7B1FA2', coordinador: '#1976D2', estudiante: '#E65100' }
-const rolIcon    = { instructor: 'mdi-account-tie', aliado: 'mdi-handshake-outline', coordinador: 'mdi-shield-crown-outline', estudiante: 'mdi-school-outline' }
+const rolIcon    = { instructor: 'mdi-account-tie', aliado: 'mdi-handshake-outline', coordinador: 'mdi-shield-crown-outline', aprendiz: 'mdi-school-outline' }
 const filtrosRol = [
   { label: 'Todos', value: 'todos' },
   { label: 'Instructores', value: 'instructor' },

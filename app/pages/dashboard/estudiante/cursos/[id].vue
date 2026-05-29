@@ -14,17 +14,19 @@ const estudianteId = auth.user?.id
 const asistencias    = ref(null)
 const calificaciones = ref(null)
 const loading        = ref(true)
+const registro       = ref(null)
 const error          = ref('')
 const tab            = ref('asistencia')
 
 async function cargarProgreso() {
   loading.value = true
   try {
-    const [asist, calif] = await Promise.all([
+    const [asist, calif, reg] = await Promise.all([
       apiFetch(`/cursos/${cursoId}/estudiantes/${estudianteId}/asistencia`),
       apiFetch(`/cursos/${cursoId}/estudiantes/${estudianteId}/calificaciones`),
+      apiFetch(`/cursos/${cursoId}/mi-registro`),
     ])
-    
+    registro.value = reg
     asistencias.value    = asist
     calificaciones.value = calif
   } catch (err) {
